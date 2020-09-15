@@ -1,5 +1,5 @@
 # iris-ldap-auth
-Sample LDAP Autehtication for REST services hosted by InterSystems IRIS.  
+Sample LDAP authentication for REST services hosted by InterSystems IRIS.  
 
 # Start
 ```bash
