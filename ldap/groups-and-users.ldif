@@ -1,0 +1,43 @@
+dn: ou=Group,dc=example,dc=com
+objectclass: organizationalUnit
+ou: Group
+
+dn: ou=People,dc=example,dc=com
+objectclass: organizationalUnit
+ou: People
+
+dn: uid=LDAPUSER1,ou=People,dc=example,dc=com
+objectClass: posixAccount
+objectClass: inetOrgPerson
+sn: LDAPUSER1
+cn: LDAPUSER1
+uid: LDAPUSER1
+displayName: LDAPUSER1
+homeDirectory: /home/LDAPUSER1
+uidNumber: 2001
+gidNumber: 1002
+userPassword: sys
+
+dn: uid=LDAPUSER2,ou=People,dc=example,dc=com
+objectClass: posixAccount
+objectClass: inetOrgPerson
+sn: LDAPUSER2
+cn: LDAPUSER2
+uid: LDAPUSER2
+displayName: LDAPUSER2
+homeDirectory: /home/LDAPUSER2
+uidNumber: 2002
+gidNumber: 1002
+userPassword: {SSHA}ULdL28MeyCc8zTkFG2LgYSkZHoMcpp/8
+
+dn: cn=intersystems-Namespace-USER,ou=Group,dc=example,dc=com
+objectclass: groupOfNames
+cn: intersystems-Namespace-USER
+member: uid=LDAPUSER1,ou=People,dc=example,dc=com
+member: uid=LDAPUSER2,ou=People,dc=example,dc=com
+
+dn: cn=intersystems-Role-%All,ou=Group,dc=example,dc=com
+objectclass: groupOfNames
+cn: intersystems-Role-%All
+member: uid=LDAPUSER1,ou=People,dc=example,dc=com
+member: uid=LDAPUSER2,ou=People,dc=example,dc=com

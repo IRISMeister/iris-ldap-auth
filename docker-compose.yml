@@ -1,0 +1,48 @@
+version: '3.2'
+services:
+  iris:
+    image: store/intersystems/iris-community:2020.3.0.200.0
+    hostname: iris
+    container_name: iris
+
+    ports:
+    # superserver default port
+    - "51773:1972"
+    # webserver/management portal port
+    - "52773:52773"
+
+    volumes:
+    # ISC = InterSystems IRIS install dir
+    - ./DurableSys:/iris-mgr
+    - ./UserCPF:/home/irisowner/cpf
+    - ./OS:/home/irisowner/OS
+
+    environment:
+    - TZ=JST-9
+    - ISC_DATA_DIRECTORY=/iris-mgr/IRIS_conf.d
+    - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
+
+  ldap-server:
+    hostname: ldap-server
+    container_name: ldap-server
+    image: osixia/openldap:latest
+    restart: always
+    environment:
+      LDAP_ORGANISATION: "myteam"
+      LDAP_DOMAIN: "example.com"
+      LDAP_ADMIN_PASSWORD: "ldap"
+    volumes:
+      - ./ldap:/ldap_files
+    
+  ldap-admin:
+    hostname: ldap-admin
+    container_name: ldap-admin
+    image: osixia/phpldapadmin:latest
+    depends_on:
+      - ldap-server
+    restart: always
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"

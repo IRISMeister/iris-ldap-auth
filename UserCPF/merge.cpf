@@ -1,0 +1,6 @@
+[Startup]
+PasswordHash=ceb9ee6dbdff3f9d08b850fd6974c6fdd5b8e792,kph2dph8
+
+[config]
+globals=0,0,32,0,0,0
+routines=32
