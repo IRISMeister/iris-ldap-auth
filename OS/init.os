@@ -14,7 +14,6 @@ Set tSC=##class(Security.Applications).Modify("/api/IAM",.prop)
 Set prop("LDAPBaseDN")="DC=example,DC=com"
 Set prop("LDAPFlags")=104
 Set prop("LDAPHostNames")="ldap-server"
-#;Set prop("LDAPInstanceId")="myiris_IRIS"
 Set prop("LDAPSearchPassword")="ldap"
 Set prop("LDAPSearchUsername")="cn=admin,dc=example,dc=com"
 Set prop("LDAPUniqueDNIdentifier")="uid"
