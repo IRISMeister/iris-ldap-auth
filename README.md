@@ -3,7 +3,7 @@ Sample LDAP Autehtication for REST services hosted by InterSystems IRIS.
 
 # Start
 ```bash
-git clone https://github.com/IRISMeister/iris-ldap-auth.git
+git clone --recursive https://github.com/IRISMeister/iris-ldap-auth.git
 cd iris-ldap-auth
 ./first-run.sh
 ```
