@@ -1,0 +1,3 @@
+[submodule "OS/FirstLook-IAM"]
+	path = OS/FirstLook-IAM
+	url = https://github.com/intersystems/FirstLook-IAM.git
