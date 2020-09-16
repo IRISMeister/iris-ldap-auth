@@ -10,7 +10,7 @@ Set tSC=##class(Security.Applications).Get("/api/IAM",.prop)
 Set prop("Enabled")=1
 Set tSC=##class(Security.Applications).Modify("/api/IAM",.prop)
 
-#; Add LDAP Config
+; Add LDAP Config
 Set prop("LDAPBaseDN")="DC=example,DC=com"
 Set prop("LDAPFlags")=104
 Set prop("LDAPHostNames")="ldap-server"

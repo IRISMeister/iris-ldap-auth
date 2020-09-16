@@ -1,25 +1,54 @@
 # iris-ldap-auth
-Sample LDAP authentication for REST services hosted by InterSystems IRIS.  
+Example of LDAP authentication for REST services hosted by InterSystems IRIS.  
 
-# Start
+(Disclaimer) It's not using TLS though InterSystems recommends that you enable TLS encryption for LDAP.
+
+# How to start
 ```bash
-git clone --recursive https://github.com/IRISMeister/iris-ldap-auth.git
-cd iris-ldap-auth
-./first-run.sh
+$ git clone --recursive https://github.com/IRISMeister/iris-ldap-auth.git
+$ cd iris-ldap-auth
+$ ./first-run.sh
+Creating network "iris-ldap-auth_default" with the default driver
+Creating iris ... done
+Goal state not specified; using 'running'
+............
+Waited 11 seconds for InterSystems IRIS to reach state 'running'
+Creating ldap-server ... done
+Creating ldap-admin  ... done
+adding new entry "cn=module,cn=config"
+adding new entry "olcOverlay=memberof,olcDatabase={1}mdb,cn=config"
+adding new entry "ou=Group,dc=example,dc=com"
+adding new entry "ou=People,dc=example,dc=com"
+adding new entry "uid=LDAPUSER1,ou=People,dc=example,dc=com"
+adding new entry "uid=LDAPUSER2,ou=People,dc=example,dc=com"
+adding new entry "cn=intersystems-Namespace-USER,ou=Group,dc=example,dc=com"
+adding new entry "cn=intersystems-Role-%All,ou=Group,dc=example,dc=com"
+$
 ```
+Take a look at ./iris.log if something went wrong.
 
 # ordinal user access
 ```bash
-curl -s -X POST http://localhost:52773/rest/coffeemakerapp/coffeemakers -u SuperUser:sys | jq
+$ curl -s -X POST http://localhost:52773/rest/coffeemakerapp/coffeemakers -u SuperUser:sys | jq
 ```
+It should return coffee makers in JSON format.
 # LDAP user access
 ```bash
-curl -s -X POST http://localhost:52773/rest/coffeemakerapp/coffeemakers -u LDAPUSER1:sys | jq
+$ curl -s -X POST http://localhost:52773/rest/coffeemakerapp/coffeemakers -u LDAPUSER1:sys | jq
 ```
+It should return coffee makers in JSON format.
 
-# Remove
+# How to remove everything
 ```bash
-./rm.sh
+$ ./rm.sh
+Stopping ldap-admin  ... done
+Stopping ldap-server ... done
+Stopping iris        ... done
+Removing ldap-admin  ... done
+Removing ldap-server ... done
+Removing iris        ... done
+Removing network iris-ldap-auth_default
+$
 ```
 # Additional info
 ## PasswordHash value for IRIS users
@@ -30,7 +59,7 @@ Enter password:sys
 Enter password again:sys
 PasswordHash=a647ce65fda7c09890288ebb8a899b7f48f70fe5,2rv3vp7v
 ```
-(Caution) So you can access any predefined accounts via this (sys) password.  
+(Caution) It means you can access any predefined IRIS accounts via this (sys) password.  
 See https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=ADOCK#ADOCK_iris_images_password_auth
 
 ## userPassword value for LDAP users
@@ -39,8 +68,10 @@ See https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=ADOCK#
 $ docker-compose exec ldap-server slappasswd -s sys
 {SSHA}KjnadpCTJKirxOx/eVIMbrHNKmwRZCvQ
 ```
+(Caution) It means you can access LDAP users via this (sys) password.  
+
 ## Enabling memberOf overlay
-It is important that memberOf is enabled to get this work. See [memberof.ldif](ldap/memberof.ldif).
+It is important that memberOf overlay is enabled to get this work. See [memberof.ldif](ldap/memberof.ldif).
 ```bash
 $ docker-compose exec ldap-server ldapsearch -LL -Y EXTERNAL -H ldapi:/// "(uid=LDAPUSER1)" -b dc=example,dc=com memberOf
 SASL/EXTERNAL authentication started
@@ -52,7 +83,24 @@ dn: uid=LDAPUSER1,ou=People,dc=example,dc=com
 memberOf: cn=intersystems-Namespace-USER,ou=Group,dc=example,dc=com
 memberOf: cn=intersystems-Role-%All,ou=Group,dc=example,dc=com
 ```
-# How to lookup
+# How to lookup directory
+## via portal
+LDAP admin portal is available at http://localhost:8080/.  Use following credential.  
+```
+Login DN: cn=admin,dc=example,dc=com  
+Password: ldap  
+```
+You will see two groups and two Peoples.
+```
+ou=Group
+cn=intersystems-Namespace-USER
+cn=intersystems-Role-%All
+ou=People
+uid=LDAPUSER1
+uid=LDAPUSER1
+```
+
+## via Command line
 To see what "People"s you have.
 ```bash
 $ docker-compose exec ldap-server ldapsearch -x -w ldap -D "cn=admin,dc=example,dc=com" -b "ou=People,dc=example,dc=com"
@@ -71,28 +119,22 @@ ou: People
 
 # LDAPUSER1, People, example.com
 dn: uid=LDAPUSER1,ou=People,dc=example,dc=com
-objectClass: posixAccount
 objectClass: inetOrgPerson
 sn: LDAPUSER1
 cn: LDAPUSER1
 uid: LDAPUSER1
 displayName: LDAPUSER1
-homeDirectory: /home/LDAPUSER1
-uidNumber: 2001
-gidNumber: 1002
-userPassword:: c3lz
+description: LDAP user created by this sample
+mail: LDAPUSER1@localhost.local
+mobile: 1234567
+userPassword:: e1NTSEF9VUxkTDI4TWV5Q2M4elRrRkcyTGdZU2taSG9NY3BwLzg=
 
 # LDAPUSER2, People, example.com
 dn: uid=LDAPUSER2,ou=People,dc=example,dc=com
-objectClass: posixAccount
 objectClass: inetOrgPerson
 sn: LDAPUSER2
 cn: LDAPUSER2
 uid: LDAPUSER2
-displayName: LDAPUSER2
-homeDirectory: /home/LDAPUSER2
-uidNumber: 2002
-gidNumber: 1002
 userPassword:: e1NTSEF9VUxkTDI4TWV5Q2M4elRrRkcyTGdZU2taSG9NY3BwLzg=
 
 # search result
