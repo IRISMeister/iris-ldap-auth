@@ -90,7 +90,7 @@ LDAP admin portal is available at http://localhost:8080/.  Use following credent
 Login DN: cn=admin,dc=example,dc=com  
 Password: ldap  
 ```
-You will see two groups and two Peoples.
+You will see two Groups and two Peoples.
 ```
 ou=Group
 cn=intersystems-Namespace-USER
