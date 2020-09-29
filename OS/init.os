@@ -1,15 +1,3 @@
-; Enable IAM Account
-Set tSC=##class(Security.Users).Get("IAM",.prop)
-If (prop("Enabled")=1) { halt } 
-Set prop("Enabled")=1
-Set prop("Password")="sys"
-Set tSC=##class(Security.Users).Modify("IAM",.prop)
-
-; Enable IAM apis
-Set tSC=##class(Security.Applications).Get("/api/IAM",.prop)
-Set prop("Enabled")=1
-Set tSC=##class(Security.Applications).Modify("/api/IAM",.prop)
-
 ; Add LDAP Config
 Set prop("LDAPBaseDN")="DC=example,DC=com"
 Set prop("LDAPFlags")=104
