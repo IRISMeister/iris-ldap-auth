@@ -7,6 +7,7 @@ ROUTINE zinit
     Set prop("LDAPSearchPassword")="ldap"
     Set prop("LDAPSearchUsername")="cn=admin,dc=example,dc=com"
     Set prop("LDAPUniqueDNIdentifier")="uid"
+    Set prop("LDAPBaseDNForGroups")="DC=example,DC=com"
     Set tSC=##class(Security.LDAPConfigs).Create("example.com",.prop)
 
     ; Change default security domain, Auth/Web session option

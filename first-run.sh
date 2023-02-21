@@ -1,3 +1,4 @@
+chmod 777 DurableSys
 docker-compose up -d iris
 docker-compose exec -T iris bash -c "\$ISC_PACKAGE_INSTALLDIR/dev/Cloud/ICM/waitISC.sh '' 30"
 rm -f ./iris.log
